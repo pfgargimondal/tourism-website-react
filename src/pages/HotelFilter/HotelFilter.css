@@ -1,0 +1,283 @@
+.hero-sectionw{
+    height: 65vh;
+    position: relative;
+}
+
+.hero-sectionw::before {
+    content: "";
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background: rgba(0,0,0,0.5);
+}
+
+
+@media (max-width:576px){
+    .btn-tour{
+    width:100%;
+    }
+}
+
+
+
+
+.filter-section span 
+{
+    padding-top:5px;
+    margin-bottom:7px;
+    padding-left:8px;
+}
+
+
+
+
+
+
+
+
+/* -------------------------- unknown css --------------------------------------------- */
+/*Hotel filter page*/
+
+/* Container */
+.booking-options {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+/* Hide default radio */
+.option-pill input[type="radio"] {
+    display: none;
+}
+
+/* Pill style */
+.option-pill {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 14px;
+    border: 1px solid #ddd;
+    border-radius: 25px;
+    cursor: pointer;
+    transition: 0.3s;
+    font-weight: 500;
+}
+
+/* Hover color (your existing hover color) */
+.option-pill:hover {
+    background: #e7f1ff;
+    border-color: #0d6efd;
+}
+
+/* Custom radio circle */
+.radio-custom {
+    width: 16px;
+    height: 16px;
+    border: 2px solid #aaa;
+    border-radius: 50%;
+    position: relative;
+}
+.booking-options {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+/* Pill style */
+.option-pill {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 14px;
+    border: 1px solid #ddd;
+    border-radius: 25px;
+    cursor: pointer;
+    transition: 0.3s;
+    background: #fff;
+}
+
+/* Radio button size */
+.option-pill input[type="radio"] {
+    width: 16px;
+    height: 16px;
+    accent-color: #0d6efd; /* Blue color */
+    cursor: pointer;
+}
+
+/* Hover */
+.option-pill:hover {
+    background: #e7f1ff;
+    border-color: #0d6efd;
+}
+
+/* Selected state */
+.option-pill:has(input[type="radio"]:checked) {
+    background: #e7f1ff;
+    border-color: #0d6efd;
+}
+
+/* Text style */
+.option-pill small {
+    display: block;
+    font-size: 12px;
+    color: #666;
+    line-height: 1;
+}
+
+/* Checkbox align */
+.option-checkbox {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+
+/* Search Box */
+.flight-search-card{
+    border:1px solid #ddd;
+    border-radius:10px;
+    position:relative;
+    overflow:hidden;
+}
+
+.flight-field-box{
+    padding:15px 18px;
+    min-height:90px;
+}
+
+.flight-field-box label{
+    font-size:12px;
+    color:#777;
+}
+
+.flight-big-text{
+    font-size:22px;
+    font-weight:700;
+}
+
+.flight-light-text{
+    color:#999;
+}
+
+.flight-field-box small{
+    font-size:12px;
+    color:#777;
+}
+
+.flight-field-divider{
+    border-left:1px solid #eee;
+}
+
+/* Swap */
+.flight-swap-icon{
+    position:absolute;
+    left:25%;
+    top:50%;
+    transform:translate(-50%,-50%);
+    width:34px;
+    height:34px;
+    border-radius:50%;
+    background:#fff;
+    border:1px solid #ddd;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+}
+
+.cfjlkgndfg
+{
+    position: relative;
+     margin-top: -40px;
+}
+/* ------------------------------------------ unknown css -----------------------------------------*/
+
+
+
+/*Hotel filter page*/
+
+
+
+.hotel-price-filter{
+    width:100%;
+    background:#fff;
+}
+
+.hotel-price-header h3{
+    font-size:20px !important;
+    margin-bottom:15px;
+}
+
+.hotel-price-inputs{
+    display:flex;
+    align-items:center;
+    margin-bottom:25px;
+}
+
+.hotel-price-field{
+    width:100%;
+}
+
+.hotel-price-field input{
+    width:100%;
+    height:40px;
+    color:white;
+    background-color:#029E9D;
+    border:1px solid #ccc;
+    border-radius:5px;
+    text-align:center;
+    font-size:16px;
+}
+
+.hotel-price-separator{
+    margin:0 10px;
+    font-size:18px;
+}
+
+.hotel-price-slider{
+    height:5px;
+    background:#ddd;
+    border-radius:5px;
+    position:relative;
+}
+
+.hotel-price-progress{
+    position:absolute;
+    height:100%;
+    left:25%;
+    right:25%;
+    background:#0d6efd;
+    border-radius:5px;
+}
+
+.hotel-range-inputs{
+    position:relative;
+}
+
+.hotel-range-inputs input{
+    position:absolute;
+    width:100%;
+    top:-10px;
+    background:none;
+    /*background-color:#E2AD64;*/
+    pointer-events:none;
+    appearance:none;
+}
+
+.hotel-range-inputs input::-webkit-slider-thumb{
+    height:16px;
+    width:16px;
+    border-radius:50%;
+    background:#0d6efd;
+    background-color:#E2AD64;
+    pointer-events:auto;
+    appearance:none;
+}
+
+.hotel-range-inputs input::-moz-range-thumb{
+    height:16px;
+    width:16px;
+    border-radius:50%;
+    background:#0d6efd;
+    pointer-events:auto;
+}
+

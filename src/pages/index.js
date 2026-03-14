@@ -1,0 +1,7 @@
+export {Home} from "./Home/Home";
+export {AboutUs} from "./AboutUs/AboutUs";
+export {ContactUs} from "./ContactUs/ContactUs";
+export {Blog} from "./Blog/Blog";
+export {BlogDetails} from "./BlogDetails/BlogDetails";
+export {HotelFilter} from "./HotelFilter/HotelFilter";
+export {FlightFilter} from "./FlightFilter/FlightFilter";
