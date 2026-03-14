@@ -1,6 +1,93 @@
+import { useState } from "react";
 import { FollowUsInstagram } from "../../component/FollowUsInstagram/FollowUsInstagram";
+import http from "../../http";
 import "./ContactUs.css";
+import { ToastContainer, toast } from "react-toastify";
 export const ContactUs = () => {
+const [inputs, setInputs] = useState({
+        name: "",
+        email: "",
+        message: "",
+      });
+      const [errors, setErrors] = useState({});
+    
+      // 🔹 Handle input change
+      const handleChange = (e) => {
+        const { name, value } = e.target;
+        setInputs({ ...inputs, [name]: value });
+      };
+    
+      // 🔹 Validation logic
+      const validateInputs = (inputs) => {
+        const newErrors = {};
+    
+        if (!inputs.name.trim()) {
+          newErrors.name = "Name is required";
+        } else if (!/^[a-zA-Z\s]+$/.test(inputs.name)) {
+          newErrors.name = "Name can only contain letters and spaces";
+        }
+
+        if (!inputs.email.trim()) {
+          newErrors.email = "Email is required";
+        } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(inputs.email)) {
+          newErrors.email = "Enter a valid email address";
+        }
+    
+        if (!inputs.message.trim()) {
+          newErrors.message = "Message is required";
+        }
+    
+        return newErrors;
+      };
+    
+     
+    
+      // 🔹 Form submission
+      const submitForm = async (e) => {
+        e.preventDefault();
+        
+          const validationErrors = validateInputs(inputs);
+    
+          if (Object.keys(validationErrors).length > 0) {
+            setErrors(validationErrors);
+            return;
+          }
+    
+          setErrors({});
+    
+          try {
+            const response = await http.post("/add-contuct-us-enquiry", inputs);
+    
+            if (response.data.success) {
+                toast.success(response.data.message, {
+                  style: {
+                    background: "#2ecc71",
+                    color: "#fff",
+                  },
+                });
+    
+                setInputs({
+                  name: "",
+                  email: "",
+                  message: "",
+                });
+            }else{
+              toast.error(response.data.message, {
+                  style: {
+                    background: "#e74c3c", // red for error
+                    color: "#fff",
+                  },
+                });
+                setInputs({
+                  name: "",
+                  email: "",
+                  message: "",
+                });
+            }
+          } catch (error) {
+            toast.error(error.response?.data?.message || "Something went wrong.");
+          }
+      };
 
     return (
       <div>
@@ -35,21 +122,48 @@ export const ContactUs = () => {
                                     tickets for your tour package system.
                                 </p>
 
-                                <form>
+                                <form noValidate onSubmit={submitForm}>
                                     <div className="row mb-3">
                                         <div className="col-md-6 mb-3 mb-md-0">
                                             <label>Name :</label>
-                                            <input type="text" className="form-control" placeholder="Enter Name" />
+                                            <input
+                                                type="text"
+                                                className="form-control"
+                                                placeholder="Enter Your name"
+                                                name="name"
+                                                value={inputs.name}
+                                                onChange={handleChange}
+                                            />
+                                            <p style={{ color: "red" }}>{errors.name}</p>
                                         </div>
                                         <div className="col-md-6">
                                             <label>Email :</label>
-                                            <input type="email" className="form-control" placeholder="Enter Email" />
+                                            <input
+                                                type="email"
+                                                name="email"
+                                                placeholder="E-Mail Address"
+                                                value={inputs.email}
+                                                onChange={handleChange}
+                                                className="form-control"
+                                            />
+                                            <p style={{ color: "red" }}>{errors.email}</p>
                                         </div>
                                     </div>
 
                                     <div className="mb-4">
                                         <label>Message :</label>
-                                        <textarea className="form-control" rows="4" placeholder="Write Message"></textarea>
+                                        <textarea
+                                            id=""
+                                            placeholder="Write Message"
+                                            cols={4}
+                                            rows={4}
+                                            className="form-control"
+                                            defaultValue={""}
+                                            name="message"
+                                            value={inputs.message}
+                                            onChange={handleChange}
+                                        />
+                                        <p style={{ color: "red" }}>{errors.message}</p>
                                     </div>
 
                                     <button type="submit" className="btn send-btn">
@@ -78,6 +192,12 @@ export const ContactUs = () => {
                     >
                 </iframe>
             </section>
+
+            <ToastContainer
+                position="top-right"
+                autoClose={3000}
+                style={{ zIndex: 9999999999 }}
+            />
 
             <FollowUsInstagram />
       </div>
