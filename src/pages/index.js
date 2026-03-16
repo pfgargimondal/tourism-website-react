@@ -5,3 +5,5 @@ export {Blog} from "./Blog/Blog";
 export {BlogDetails} from "./BlogDetails/BlogDetails";
 export {HotelFilter} from "./HotelFilter/HotelFilter";
 export {FlightFilter} from "./FlightFilter/FlightFilter";
+export {PrivacyPolicy} from "./PrivacyPolicy/PrivacyPolicy";
+export {TermsCondition} from "./TermsCondition/TermsCondition";

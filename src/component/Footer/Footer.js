@@ -41,8 +41,8 @@ export const Footer = () => {
                         <ul class="footer-links list-unstyled">
                             <li><Link to="/about-us">About Us</Link></li>
                             <li><a href="/">Delivery Information</a></li>
-                            <li><a href="/">Privacy Policy</a></li>
-                            <li><a href="/">Terms & Conditions</a></li>
+                            <li><Link to="/privacy-policy">Privacy Policy</Link></li>
+                            <li><Link to="/terms-&-conditions">Terms & Conditions</Link></li>
                             <li><a href="/">Customer Service</a></li>
                             <li><a href="/">Return Policy</a></li>
                         </ul>

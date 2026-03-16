@@ -1,105 +1,126 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { FollowUsInstagram } from "../../component/FollowUsInstagram/FollowUsInstagram";
 import http from "../../http";
 import "./ContactUs.css";
 import { ToastContainer, toast } from "react-toastify";
+import Loader from "../../component/Loader/Loader";
 export const ContactUs = () => {
-const [inputs, setInputs] = useState({
+
+    const [loading, setLoading] = useState(false);
+    const [contactUsImage, setContactUsImage] = useState({});
+    const [contactUsDetails, setContactUsDetails] = useState({});
+
+    useEffect(() => {
+        const fetchContactUsData = async () => {
+            setLoading(true);
+        try {
+            const getresponse = await http.get("fetch-contact-us-details");
+            setContactUsImage(getresponse.data.image_url);
+            setContactUsDetails(getresponse.data.data);
+        } catch (error) {
+            console.error("Error fetching users:", error);
+        } finally {
+            setLoading(false);
+        }
+        };
+
+        fetchContactUsData();
+    }, []);
+
+    const [inputs, setInputs] = useState({
         name: "",
         email: "",
         message: "",
-      });
-      const [errors, setErrors] = useState({});
+    });
+    const [errors, setErrors] = useState({});
     
-      // 🔹 Handle input change
-      const handleChange = (e) => {
-        const { name, value } = e.target;
-        setInputs({ ...inputs, [name]: value });
-      };
-    
-      // 🔹 Validation logic
-      const validateInputs = (inputs) => {
-        const newErrors = {};
-    
-        if (!inputs.name.trim()) {
-          newErrors.name = "Name is required";
-        } else if (!/^[a-zA-Z\s]+$/.test(inputs.name)) {
-          newErrors.name = "Name can only contain letters and spaces";
-        }
+    // 🔹 Handle input change
+    const handleChange = (e) => {
+    const { name, value } = e.target;
+    setInputs({ ...inputs, [name]: value });
+    };
 
-        if (!inputs.email.trim()) {
-          newErrors.email = "Email is required";
-        } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(inputs.email)) {
-          newErrors.email = "Enter a valid email address";
-        }
-    
-        if (!inputs.message.trim()) {
-          newErrors.message = "Message is required";
-        }
-    
-        return newErrors;
-      };
-    
-     
-    
-      // 🔹 Form submission
-      const submitForm = async (e) => {
+    // 🔹 Validation logic
+    const validateInputs = (inputs) => {
+    const newErrors = {};
+
+    if (!inputs.name.trim()) {
+        newErrors.name = "Name is required";
+    } else if (!/^[a-zA-Z\s]+$/.test(inputs.name)) {
+        newErrors.name = "Name can only contain letters and spaces";
+    }
+
+    if (!inputs.email.trim()) {
+        newErrors.email = "Email is required";
+    } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(inputs.email)) {
+        newErrors.email = "Enter a valid email address";
+    }
+
+    if (!inputs.message.trim()) {
+        newErrors.message = "Message is required";
+    }
+
+    return newErrors;
+    };
+
+    // 🔹 Form submission
+    const submitForm = async (e) => {
         e.preventDefault();
-        
-          const validationErrors = validateInputs(inputs);
-    
-          if (Object.keys(validationErrors).length > 0) {
+
+        const validationErrors = validateInputs(inputs);
+
+        if (Object.keys(validationErrors).length > 0) {
             setErrors(validationErrors);
             return;
-          }
-    
-          setErrors({});
-    
-          try {
-            const response = await http.post("/add-contuct-us-enquiry", inputs);
-    
-            if (response.data.success) {
-                toast.success(response.data.message, {
-                  style: {
-                    background: "#2ecc71",
-                    color: "#fff",
-                  },
-                });
-    
-                setInputs({
-                  name: "",
-                  email: "",
-                  message: "",
-                });
-            }else{
-              toast.error(response.data.message, {
-                  style: {
-                    background: "#e74c3c", // red for error
-                    color: "#fff",
-                  },
-                });
-                setInputs({
-                  name: "",
-                  email: "",
-                  message: "",
-                });
-            }
-          } catch (error) {
-            toast.error(error.response?.data?.message || "Something went wrong.");
-          }
-      };
+        }
 
+        setErrors({});
+        setLoading(true);
+
+        try {
+        const response = await http.post("/add-contuct-us-enquiry", inputs);
+
+        if (response.data.success) {
+            toast.success(response.data.message);
+
+            setInputs({
+                name: "",
+                email: "",
+                message: "",
+            });
+        }else{
+            toast.error(response.data.message);
+            setInputs({
+                name: "",
+                email: "",
+                message: "",
+            });
+        }
+        } catch (error) {
+            toast.error(error.response?.data?.message || "Something went wrong.");
+        } finally {
+            setLoading(false);
+        }
+    };
+
+  
     return (
       <div>
-        <section className="hero-sectionz" style={{
-                background: "url('./images/tourist-carrying-baggage.jpg') center center / cover no-repeat"
-            }}>
+        {loading && <Loader/>}
+        
+        <section
+            className="hero-sectionz"
+            style={{
+                background: `url(${contactUsImage}/${contactUsDetails?.banner_image}) center center / cover no-repeat`
+            }}
+            >
             <div className="container text-center hero-content">
-                <h1 className="hero-title">Contact Us</h1>
-                <p className="hero-description">
-                    Book flights,trains,and buses easily with our trusted ticket booking service. <br/> Fast, secure, and
-                    hassle-free travel planning starts here.
-                </p>
+                <h1 className="hero-title">{contactUsDetails?.title}</h1>
+                <div className="hero-description"
+                    dangerouslySetInnerHTML={{
+                    __html: contactUsDetails?.description && (contactUsDetails.description),
+                    }}
+                />
             </div>
         </section>
 
@@ -109,18 +130,19 @@ const [inputs, setInputs] = useState({
 
                         <div className="col-lg-6 text-center mb-4 mb-lg-0">
                             <div className="image-wrapper">
-                                <img src="images/travelling.png" className="img-fluid main-img" alt="Traveler" />
+                                <img src={`${contactUsImage}/${contactUsDetails?.form_image}`} className="img-fluid main-img" alt="Traveler" />
                             </div>
                         </div>
 
                         <div className="col-lg-6">
                             <div className="contact-content">
-                                <p className="contact-small">Contact Us</p>
-                                <h2 className="contact-title">Get In Touch</h2>
-                                <p className="contact-desc">
-                                    Our attraction pass save you more than buying individual
-                                    tickets for your tour package system.
-                                </p>
+                                <p className="contact-small">{contactUsDetails?.form_heading}</p>
+                                <h2 className="contact-title">{contactUsDetails?.form_title}</h2>
+                                <div className="contact-desc"
+                                    dangerouslySetInnerHTML={{
+                                    __html: contactUsDetails?.form_description && (contactUsDetails.form_description),
+                                    }}
+                                />
 
                                 <form noValidate onSubmit={submitForm}>
                                     <div className="row mb-3">
@@ -183,7 +205,7 @@ const [inputs, setInputs] = useState({
             <section className="map-section">
                 <iframe 
                     title="Albany New York Location Map"
-                    src="https://www.google.com/maps?q=Albany,New York&output=embed"
+                    src={contactUsDetails?.map_link}
                     width="100%"
                     height="400"
                     style={{ border: 0 }}
