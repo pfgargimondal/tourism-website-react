@@ -1,53 +1,50 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import "./AboutUs.css";
+import http from "../../http";
+import Loader from "../../component/Loader/Loader";
 import { FollowUsInstagram } from "../../component/FollowUsInstagram/FollowUsInstagram";
+import { Testimonial } from "../Testimonial/Testimonial";
 export const AboutUs = () => {
-  const [activeIndex, setActiveIndex] = useState(0);
+    const [activeIndex, setActiveIndex] = useState(0);
 
-  const toggleFAQ = (index) => {
-    setActiveIndex(activeIndex === index ? null : index);
-  };
+    const [loading, setLoading] = useState(false);
+    const [aboutUsDetails, setAboutUsDetails] = useState({});
 
-  const faqs = [
-    {
-      question: "What types of tours do you offer?",
-      answer:
-        "We offer a wide range of tours, including cultural, adventure, luxury, and customized itineraries. Popular destinations include Europe, Africa (e.g., Morocco)."
-    },
-    {
-      question: "Are the tours customizable?",
-      answer:
-        "Yes, we customize tours according to your preferences, travel dates, and budget."
-    },
-    {
-      question: "What safety measures do you follow?",
-      answer:
-        "We follow international safety standards, certified guides, and secure transport services."
-    },
-    {
-      question: "How far in advance should I book?",
-      answer:
-        "We recommend booking at least 2–4 weeks in advance for better availability."
-    },
-    {
-      question: "What is your cancellation policy?",
-      answer:
-        "Free cancellation up to 48 hours before departure for most packages."
-    }
-  ];
+    useEffect(() => {
+        const fetchAboutUsData = async () => {
+            setLoading(true);
+        try {
+            const getresponse = await http.get("/get-about-us-content");
+            setAboutUsDetails(getresponse.data);
+        } catch (error) {
+            console.error("Error fetching users:", error);
+        } finally {
+            setLoading(false);
+        }
+        };
+
+        fetchAboutUsData();
+    }, []);
+
+    const toggleFAQ = (index) => {
+        setActiveIndex(activeIndex === index ? null : index);
+    };
+
     return (
       <div>
+         {loading && <Loader/>}
         <section className="hero-sectionv" style={{
-            background: "url('./images/people-taking-part-sustainable-travel-movement.jpg') center center/cover no-repeat",
+            background: `url(${aboutUsDetails.image_url}/${aboutUsDetails.data?.banner_image}) center center/cover no-repeat`,
             height: "400px"
           }}>
         
             <div className="container text-center hero-content">
-                <h1 className="hero-title">About Us</h1>
-                <p className="hero-description">
-                    Take a close look at our exceptional portfolio of luxury properties available for sale or rent. Each
-                    listing has been carefully selected to meet our high standards of quality and comfort.
-                </p>
+                <h1 className="hero-title">{aboutUsDetails.data?.banner_title}</h1>
+                <div className="hero-description"
+                    dangerouslySetInnerHTML={{
+                    __html: aboutUsDetails.data?.first_section_description && (aboutUsDetails.data.first_section_description),
+                    }}
+                />
             </div>
         </section>
 
@@ -56,40 +53,40 @@ export const AboutUs = () => {
                 <div className="row align-items-center g-5">
                     <div className="col-lg-6 position-relative">
                         <div className="about-img">
-                            <img alt="" src="./images/about_us_journey_sec.png" className="img-fluid"/>
+                            <img alt="" src={`${aboutUsDetails.image_url}/${aboutUsDetails.data?.image_one}`} className="img-fluid"/>
                         </div>
                         <div className="badge-discount">
-                            <img src="./images/65_dis.png" alt=""/>
+                            <img src={`${aboutUsDetails.image_url}/${aboutUsDetails.data?.image_two}`}  alt=""/>
                         </div>
                         <div className="stat-box">
-                            <span className="zero_plus" style={{ color: "var(--main-green-color)" }}>0+</span>
-                            <small>Locations World Wide</small>
+                            <span className="zero_plus" style={{ color: "var(--main-green-color)" }}>{aboutUsDetails.data?.second_stat_number}+</span>
+                            <small>{aboutUsDetails.data?.second_section_stat_text}</small>
                         </div>
                     </div>
                     <div className="col-lg-6">
-                        <small style={{ color: "var(--main-green-color)", fontWeight: 600 }}>About Travel Agency</small>
-                        <h2 className="fw-bold mt-2" style={{ fontSize: "34px", lineHeight: "1.3" }}>Our Journey Memorable Adventures
-                            Worldwide</h2>
-                        <p className="text-muted">Our attraction pass save you more than buying individual tickets for your
-                            package system.</p>
+                        <small style={{ color: "var(--main-green-color)", fontWeight: 600 }}>{aboutUsDetails.data?.second_section_heading}</small>
+                        <h2 className="fw-bold mt-2" style={{ fontSize: "34px", lineHeight: "1.3" }}>{aboutUsDetails.data?.second_section_title}</h2>
+                        <div className="text-muted"
+                            dangerouslySetInnerHTML={{
+                            __html: aboutUsDetails.data?.second_section_description && (aboutUsDetails.data.second_section_description),
+                            }}
+                        />
                         <div className="d-flex align-items-start mt-4">
                             <div className="feature-icon">
-                                <img src="./images/journey_icon_1.png" alt=""/>
+                                <img src={`${aboutUsDetails.image_url}/${aboutUsDetails.data?.seccod_section_logo_one}`} alt=""/>
                             </div>
                             <div>
-                                <h6 className="fw-bold">24/7 Support For Hassle-Free Trips</h6>
-                                <p className="text-muted small">Our attraction pass save you more than buying individual
-                                    tickets.</p>
+                                <h6 className="fw-bold">{aboutUsDetails.data?.seccod_section_title_one}</h6>
+                                <p className="text-muted small">{aboutUsDetails.data?.seccod_section_descrition_one}</p>
                             </div>
                         </div>
                         <div className="d-flex align-items-start mt-3">
                             <div className="feature-icon">
-                                <img src="./images/journey_icon_2.png" alt=""/>
+                                <img src={`${aboutUsDetails.image_url}/${aboutUsDetails.data?.seccod_section_logo_two}`} alt=""/>
                             </div>
                             <div>
-                                <h6 className="fw-bold">Exclusive Deals On Top Destinations</h6>
-                                <p className="text-muted small">Our attraction pass save you more than buying individual
-                                    tickets.</p>
+                                <h6 className="fw-bold">{aboutUsDetails.data?.seccod_section_title_two}</h6>
+                                <p className="text-muted small">{aboutUsDetails.data?.seccod_section_descrition_two}</p>
                             </div>
                         </div>
                         <a href="/" className="btn btn-teal mt-4">More About Travel <div className="arrow_journey"> → </div> </a>
@@ -102,13 +99,14 @@ export const AboutUs = () => {
             <div className="container">
                 <div className="promo row align-items-center">
                     <div className="col-lg-6 left">
-                        <h3>Grab up to <span style={{ color: "var(--main-green-color)" }}>35% off</span><br/>on your favorite
-                            Destination</h3>
-                        <p className="text-muted">Limited time offer, don't miss the opportunity</p>
+                        {/* <h3>Grab up to <span style={{ color: "var(--main-green-color)" }}>35% off</span><br/>on your favorite
+                            Destination</h3> */}
+                        <h3>{aboutUsDetails.data?.third_section_heading}</h3>
+                        <p className="text-muted">{aboutUsDetails.data?.third_section_title}</p>
                         <a href="/" className="btn btn-teal mt-3">Book Now</a>
                     </div>
                     <div className="col-lg-6">
-                        <img alt="" src="./images/about_us_grab_up_sec.png" className="img-fluid grab_up_img"/>
+                        <img alt="" src={`${aboutUsDetails.image_url}/${aboutUsDetails.data?.seccod_section_image}`} className="img-fluid grab_up_img"/>
                     </div>
                 </div>
             </div>
@@ -120,23 +118,23 @@ export const AboutUs = () => {
                         <div className="row">
                             <div className="col-lg-6" style={{ height: "460px" }}>
                                 <div className="grid-item cruises">
-                                    <img alt="" src="./images/cruises.png"/>
+                                    <img alt="" src={`${aboutUsDetails.image_url}/${aboutUsDetails.data?.fourth_section_image_1}`}/>
                                     <div className="overlay"></div>
-                                    <div className="label">Cruises</div>
+                                    <div className="label">{aboutUsDetails.data?.fourth_section_title_1}</div>
                                 </div>
                                 <div className="grid-item museum">
-                                    <img alt="" src="./images/Museum_Tour.png"/>
+                                    <img alt="" src={`${aboutUsDetails.image_url}/${aboutUsDetails.data?.fourth_section_image_2}`}/>
                                     <div className="overlay"></div>
-                                    <div className="label">Museum Tour</div>
+                                    <div className="label">{aboutUsDetails.data?.fourth_section_title_2}</div>
                                 </div>
 
                             </div>
 
                             <div className="col-lg-6" style={{ height: "460px"}}>
                                 <div className="grid-item beach">
-                                    <img alt="" src="./images/Beach_Tours.png"/>
+                                    <img alt="" src={`${aboutUsDetails.image_url}/${aboutUsDetails.data?.fourth_section_image_3}`}/>
                                     <div className="overlay"></div>
-                                    <div className="label">Beach Tours</div>
+                                    <div className="label">{aboutUsDetails.data?.fourth_section_title_3}</div>
                                 </div>
                             </div>
                         </div>
@@ -145,25 +143,25 @@ export const AboutUs = () => {
 
                     <div className="col-lg-5 right-grid" style={{ height: "460px"}}>
                         <div className="grid-item city">
-                            <img alt="" src="./images/City_Tours.png"/>
+                            <img alt="" src={`${aboutUsDetails.image_url}/${aboutUsDetails.data?.fourth_section_image_4}`}/>
                             <div className="overlay"></div>
-                            <div className="label">City Tours</div>
+                            <div className="label">{aboutUsDetails.data?.fourth_section_title_4}</div>
                         </div>
 
                         <div className="row">
                             <div className="col-lg-6">
                                 <div className="grid-item food">
-                                    <img alt="" src="./images/Food.png"/>
+                                    <img alt="" src={`${aboutUsDetails.image_url}/${aboutUsDetails.data?.fourth_section_image_5}`}/>
                                     <div className="overlay"></div>
-                                    <div className="label">Food</div>
+                                    <div className="label">{aboutUsDetails.data?.fourth_section_title_5}</div>
                                 </div>
                             </div>
 
                             <div className="col-lg-6">
                                 <div className="grid-item hiking">
-                                    <img alt="" src="./images/Hiking.png"/>
+                                    <img alt="" src={`${aboutUsDetails.image_url}/${aboutUsDetails.data?.fourth_section_image_6}`}/>
                                     <div className="overlay"></div>
-                                    <div className="label">Hiking</div>
+                                    <div className="label">{aboutUsDetails.data?.fourth_section_title_6}</div>
                                 </div>
                             </div>
                         </div>
@@ -178,10 +176,11 @@ export const AboutUs = () => {
 
                     <div className="col-lg-5">
                         <div className="left-heading mb-4">
-                            <h5>
+                            {/* <h5>
                                 Trusted Solution Of Your <br/>
                                 <span>Tourism Services</span>
-                            </h5>
+                            </h5> */}
+                            {aboutUsDetails.data?.fifth_section_heading}
                         </div>
 
                         <div className="feature-card vip">
@@ -189,8 +188,8 @@ export const AboutUs = () => {
                                 <i className="bi bi-bag-check"></i>
                             </div>
                             <div>
-                                <h6>VIP Packages</h6>
-                                <p>Include premium seating, meet-and-greet experiences, backstage tours.</p>
+                                <h6>{aboutUsDetails.data?.fifth_section_title_one}</h6>
+                                <p>{aboutUsDetails.data?.fifth_section_descrition_one}</p>
                             </div>
                         </div>
 
@@ -199,8 +198,8 @@ export const AboutUs = () => {
                                 <i className="bi bi-airplane"></i>
                             </div>
                             <div>
-                                <h6>Travel Packages</h6>
-                                <p>Bundles that include concert tickets, accommodations.</p>
+                                <h6>{aboutUsDetails.data?.fifth_section_title_two}</h6>
+                                <p>{aboutUsDetails.data?.fifth_section_descrition_two}</p>
                             </div>
                         </div>
 
@@ -209,25 +208,24 @@ export const AboutUs = () => {
                                 <i className="bi bi-geo-alt"></i>
                             </div>
                             <div>
-                                <h6>Best Price Guarantee</h6>
-                                <p>Such as private rehearsals, soundcheck access.</p>
+                                <h6>{aboutUsDetails.data?.fifth_section_title_three}</h6>
+                                <p>{aboutUsDetails.data?.fifth_section_descrition_three}</p>
                             </div>
                         </div>
 
                     </div>
 
                     <div className="col-lg-7">
-                        <span className="badge-custom">Most Popular Providers</span>
-                        <h3 className="right-title">Try Relaxing Accomodations.</h3>
+                        <span className="badge-custom">{aboutUsDetails.data?.faq_heading}</span>
+                        <h3 className="right-title">{aboutUsDetails.data?.faq_title}</h3>
 
                         <div className="faq-accordion">
 
-                            {faqs.map((faq, index) => (
+                            {aboutUsDetails.data?.faqContent.map((faq, index) => (
                                 <div
                                     key={index}
                                     className={`faq-item ${activeIndex === index ? "active" : ""}`}
                                 >
-
                                 <div
                                     className="faq-question"
                                     onClick={() => toggleFAQ(index)}
@@ -252,10 +250,10 @@ export const AboutUs = () => {
             </div>
         </section>
 
-        <section className="testimonial mt-5" style={{
+        {/* <section className="testimonial mt-5" style={{
                 background: "url('/images/testimonial_bg.png') center / cover no-repeat"
             }}>
-            <div className="container content">
+            <div className="container contentrgdfg">
                 <div className="row align-items-center">
                     <div className="col-lg-5 text-start">
                         <div className="subtitle">Our Testimonials</div>
@@ -280,7 +278,9 @@ export const AboutUs = () => {
                     </div>
                 </div>
             </div>
-        </section>
+        </section> */}
+
+        <Testimonial/>
 
         <section className="section text-center mt-5 mb-5">
             <div className="container">

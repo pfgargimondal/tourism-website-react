@@ -376,7 +376,6 @@
 
 /* TESTIMONIAL */
 .testimonial {
-    /* background: url('/images/testimonial_bg.png') center/cover no-repeat; */
     padding: 100px 0;
     color: #fff;
     position: relative
@@ -389,7 +388,7 @@
     background: rgba(0, 0, 0, .7)
 }
 
-.testimonial .content {
+.testimonial .contentrgdfg {
     position: relative;
     z-index: 2
 }

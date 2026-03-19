@@ -7,3 +7,5 @@ export {HotelFilter} from "./HotelFilter/HotelFilter";
 export {FlightFilter} from "./FlightFilter/FlightFilter";
 export {PrivacyPolicy} from "./PrivacyPolicy/PrivacyPolicy";
 export {TermsCondition} from "./TermsCondition/TermsCondition";
+export {CustomerService} from "./CustomerService/CustomerService";
+export {ReturnPolicy} from "./ReturnPolicy/ReturnPolicy";

@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import "./Home.css";
 import { FollowUsInstagram } from "../../component/FollowUsInstagram/FollowUsInstagram";
+import { Testimonial } from "../Testimonial/Testimonial";
 export const Home = () => {
 
     const slides = [
@@ -742,7 +743,7 @@ export const Home = () => {
           </div>
         </div>
       </section>
-      <section
+      {/* <section
         className="testimonials-section"
         style={{
           backgroundImage: "url('./images/testimoniback.png')",
@@ -790,7 +791,10 @@ export const Home = () => {
             </div>
           </div>
         </div>
-      </section>
+      </section> */}
+
+      <Testimonial />
+
       <section className="top-deals py-5">
         <div className="container text-center">
           <h2 className="deals-title">

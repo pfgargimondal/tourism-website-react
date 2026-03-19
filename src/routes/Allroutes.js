@@ -1,5 +1,5 @@
 import { Routes, Route } from "react-router-dom";
-import { Home, ContactUs, AboutUs, Blog, BlogDetails, HotelFilter, FlightFilter, PrivacyPolicy, TermsCondition } from "../pages/index";
+import { Home, ContactUs, AboutUs, Blog, BlogDetails, HotelFilter, FlightFilter, PrivacyPolicy, TermsCondition, CustomerService, ReturnPolicy } from "../pages/index";
 
 function Allroutes() {
   return (
@@ -13,6 +13,8 @@ function Allroutes() {
       <Route path="/flight-filter" element={<FlightFilter />} />
       <Route path="/privacy-policy" element={<PrivacyPolicy />} />
       <Route path="/terms-&-conditions" element={<TermsCondition />} />
+      <Route path="/customer-service" element={<CustomerService />} />
+      <Route path="/return-policy" element={<ReturnPolicy />} />
     </Routes>
   );
 }
